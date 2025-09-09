@@ -57,7 +57,8 @@ const PainterDashboard = () => {
   if (loading) return <p>Loading profile...</p>;
   if (!profile) return <p>Unable to load profile.</p>;
 
-  const profileImageUrl = profile?.profileImage || null; 
+const profileImageUrl = profile?.profileImage || null;
+
 
 
   return (
@@ -93,10 +94,10 @@ const PainterDashboard = () => {
           
 {profileImageUrl ? (
   <img
-    src={profileImageUrl}  // ✅ Cloudinary URL is already stored
-    alt="Profile"
-    className="w-32 h-32 rounded-full border-2 border-gray-200 object-cover"
-  />
+  src={profileImageUrl}  // ✅ will now be Cloudinary URL
+  alt="Profile"
+  className="w-32 h-32 rounded-full border-2 border-gray-200 object-cover"
+/>
 ) : (
   <div className="w-32 h-32 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-400">
     No Image
