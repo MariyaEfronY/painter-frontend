@@ -57,9 +57,8 @@ const PainterDashboard = () => {
   if (loading) return <p>Loading profile...</p>;
   if (!profile) return <p>Unable to load profile.</p>;
 
-  const profileImageUrl = profile?.profileImage
-    ? `https://painter-backend-inky.vercel.app/uploads/profileImages/${profile.profileImage}`
-    : null;
+  const profileImageUrl = profile?.profileImage || null; 
+
 
   return (
     <div className="flex min-h-screen bg-gray-50">
