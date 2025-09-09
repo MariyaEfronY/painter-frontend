@@ -21,7 +21,7 @@ const PainterDashboard = () => {
       setLoading(true);
       const token = localStorage.getItem("painterToken");
       const response = await axios.get(
-        "https://painter-backend.netlify.app/api/painter/profile",
+        "https://painter-backend-inky.vercel.app/api/painter/profile",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setProfile(response.data);
@@ -43,7 +43,7 @@ const PainterDashboard = () => {
     if (path === "/logout") {
       const token = localStorage.getItem("painterToken");
       if (token) {
-        axios.post("https://painter-backend.netlify.app/api/painter/logout", {}, {
+        axios.post("https://painter-backend-inky.vercel.app/api/painter/logout", {}, {
           headers: { Authorization: `Bearer ${token}` },
         }).catch((err) => console.error("Logout error:", err.message));
       }
@@ -58,7 +58,7 @@ const PainterDashboard = () => {
   if (!profile) return <p>Unable to load profile.</p>;
 
   const profileImageUrl = profile?.profileImage
-    ? `https://painter-backend.netlify.app/uploads/profileImages/${profile.profileImage}`
+    ? `https://painter-backend-inky.vercel.app/uploads/profileImages/${profile.profileImage}`
     : null;
 
   return (
