@@ -91,17 +91,19 @@ const PainterDashboard = () => {
         {/* Profile Card */}
         <div className="bg-white shadow-md rounded-xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
           {/* Profile Image */}
-          {profileImageUrl ? (
-            <img
-              src={profileImageUrl}
-              alt="Profile"
-              className="w-32 h-32 rounded-full border-2 border-gray-200 object-cover"
-            />
-          ) : (
-            <div className="w-32 h-32 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-400">
-              No Image
-            </div>
-          )}
+          
+{profileImageUrl ? (
+  <img
+    src={profileImageUrl}  // ✅ Cloudinary URL is already stored
+    alt="Profile"
+    className="w-32 h-32 rounded-full border-2 border-gray-200 object-cover"
+  />
+) : (
+  <div className="w-32 h-32 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-400">
+    No Image
+  </div>
+)}
+
 
           {/* Profile Info */}
           <div className="flex-1 space-y-2">
