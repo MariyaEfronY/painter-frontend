@@ -44,10 +44,19 @@ const PainterDetails = () => {
     <div style={{ padding: "1.5rem", maxWidth: "768px", margin: "0 auto", backgroundColor: colors.background, color: colors.textDark }}>
       <div style={{ textAlign: "center" }}>
         <img
-          src={`https://painter-backend-inky.vercel.app/uploads/profileImages/${painter.profileImage}`}
-          alt={painter.name}
-          style={{ width: "180px", height: "180px", borderRadius: "50%", margin: "0 auto", border: "4px solid #ddd", objectFit: "cover", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
-        />
+  src={painter.profileImage || "/default-avatar.png"} 
+  alt={painter.name}
+  style={{
+    width: "180px",
+    height: "180px",
+    borderRadius: "50%",
+    margin: "0 auto",
+    border: "4px solid #ddd",
+    objectFit: "cover",
+    boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
+  }}
+/>
+
         <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>Name: {painter.name}</h1>
         <p style={{ color: "#555" }}>City: {painter.city}</p>
         <p style={{ marginTop: "0.5rem" }}>Bio: {painter.bio}</p>
