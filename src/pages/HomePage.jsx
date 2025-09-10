@@ -479,11 +479,7 @@ const handleSearch = async () => {
           {painters.length > 0 ? painters.map((p) => (
             <motion.div key={p._id} whileHover={{ scale: 1.05 }} style={{ backgroundColor: colors.cardBg, borderRadius: "1rem", padding: "1.5rem", textAlign: "center", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
               <img
-  src={
-    p.profileImage
-      ? p.profileImage // ✅ full URL from backend
-      : "/default-avatar.png" // ✅ fallback image in case no profileImage
-  }
+  src={p.profileImage || "/default-avatar.png"} // ✅ Cloudinary URL or fallback
   alt={p.name}
   style={{
     width: "6rem",
@@ -493,6 +489,7 @@ const handleSearch = async () => {
     objectFit: "cover",
   }}
 />
+
 
               <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
               <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>{p.city}</p>
