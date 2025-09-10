@@ -478,7 +478,22 @@ const handleSearch = async () => {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2rem" }}>
           {painters.length > 0 ? painters.map((p) => (
             <motion.div key={p._id} whileHover={{ scale: 1.05 }} style={{ backgroundColor: colors.cardBg, borderRadius: "1rem", padding: "1.5rem", textAlign: "center", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
-              <img src={`https://painter-backend-inky.vercel.app/uploads/profileImages/${p.profileImage}`} alt={p.name} style={{ width: "6rem", height: "6rem", borderRadius: "50%", margin: "0 auto 1rem", objectFit: "cover" }} />
+              <img
+  src={
+    p.profileImage
+      ? p.profileImage // ✅ full URL from backend
+      : "/default-avatar.png" // ✅ fallback image in case no profileImage
+  }
+  alt={p.name}
+  style={{
+    width: "6rem",
+    height: "6rem",
+    borderRadius: "50%",
+    margin: "0 auto 1rem",
+    objectFit: "cover",
+  }}
+/>
+
               <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
               <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>{p.city}</p>
               <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", color: colors.textMuted, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{p.bio}</p>
