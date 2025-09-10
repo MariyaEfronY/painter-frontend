@@ -550,7 +550,8 @@ const handleSearch = async () => {
         <li>
   <Link to="/about" style={{ color: "#fff", cursor: "pointer" }}>About</Link>
 </li>
-        <li><a href="/contact" style={{ color: "#fff", cursor: "pointer" }}>Contact</a>
+        <li>
+  <Link to="/contact" style={{ color: "#fff", cursor: "pointer" }}>Contact</Link>
 </li>
         <li><a href="#" style={{ color: "#fff" }}>Privacy Policy</a></li>
       </ul>
