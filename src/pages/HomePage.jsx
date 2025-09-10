@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Calendar, Paintbrush, Home } from "lucide-react";
 import Lottie from "lottie-react";
@@ -546,7 +547,8 @@ const handleSearch = async () => {
     >
       <h3 style={{ fontWeight: "600", marginBottom: "1rem" }}>Remain Links</h3>
       <ul style={{ display: "flex", flexDirection: "column", gap: "0.5rem", fontSize: "0.9rem" }}>
-        <li><a to="/about" style={{ color: "#fff", cursor: "pointer" }}>About</a>
+        <li>
+  <Link to="/about" style={{ color: "#fff", cursor: "pointer" }}>About</Link>
 </li>
         <li><a href="/contact" style={{ color: "#fff", cursor: "pointer" }}>Contact</a>
 </li>
