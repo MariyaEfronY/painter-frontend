@@ -546,7 +546,7 @@ const handleSearch = async () => {
     >
       <h3 style={{ fontWeight: "600", marginBottom: "1rem" }}>Remain Links</h3>
       <ul style={{ display: "flex", flexDirection: "column", gap: "0.5rem", fontSize: "0.9rem" }}>
-        <li><a href="/about" style={{ color: "#fff", cursor: "pointer" }}>About</a>
+        <li><a to="/about" style={{ color: "#fff", cursor: "pointer" }}>About</a>
 </li>
         <li><a href="/contact" style={{ color: "#fff", cursor: "pointer" }}>Contact</a>
 </li>
