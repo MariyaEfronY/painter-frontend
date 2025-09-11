@@ -65,13 +65,14 @@ useEffect(() => {
 
   try {
     setLoading(true);
-    setSearchResults([]);
+    setSearchResults([]); // clear old results
 
     const { data } = await API.get("/painter/search", {
       params: { phoneNumber: phone },
     });
 
-    setSearchResults(data);
+    // ✅ backend returns single painter object
+    setSearchResults([data]); // wrap in array for rendering
   } catch (err) {
     console.error("Search failed:", err);
     setSearchResults([]);
