@@ -68,10 +68,11 @@ const PainterDetails = () => {
           painter.gallery.map((img, index) => (
             <div key={index} style={{ backgroundColor: "#fff", padding: "0.5rem", borderRadius: "0.5rem", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
               <img
-                src={`https://painter-backend-inky.vercel.app${img.image}`}
-                alt={img.description || "Project image"}
-                style={{ width: "100%", borderRadius: "0.3rem" }}
-              />
+  src={img.image}   // ✅ Cloudinary URL directly
+  alt={img.description || "Project image"}
+  style={{ width: "100%", borderRadius: "0.3rem" }}
+/>
+
               <p style={{ fontSize: "0.75rem", color: "#555", marginTop: "0.25rem" }}>{img.description}</p>
             </div>
           ))
