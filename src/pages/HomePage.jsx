@@ -67,7 +67,7 @@ useEffect(() => {
     setLoading(true);
     setSearchResults([]);
 
-    const { data } = await API.get("/painters/search", {
+    const { data } = await API.get("/painter/search", {
       params: { phoneNumber: phone },
     });
 
