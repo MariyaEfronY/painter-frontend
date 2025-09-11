@@ -7,6 +7,7 @@ import axios from "axios";
 import API from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import heroAnimation from "../assets/hero-painter.json";
+import logo from "../assets/m_p_logo";
 
 const HomePage = () => {
   const [painters, setPainters] = useState([]);
@@ -84,7 +85,7 @@ const handleSearch = async () => {
       }}
     >
       {/* Navigation */}
-      {/* Navigation */}
+
 <nav
   style={{
     position: "fixed",
@@ -103,19 +104,16 @@ const handleSearch = async () => {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "1rem",
+      padding: "0.8rem 1rem",
     }}
   >
-    <h1
-      style={{
-        fontWeight: "bold",
-        color: colors.primary,
-        cursor: "pointer",
-      }}
+    {/* ✅ Logo instead of text */}
+    <img
+      src={m_p_logo}
+      alt="PainterBooking Logo"
+      style={{ height: "45px", cursor: "pointer" }}
       onClick={() => scrollToSection(heroRef)}
-    >
-      PainterBooking
-    </h1>
+    />
 
     {/* Desktop Menu */}
     <div
@@ -126,11 +124,11 @@ const handleSearch = async () => {
         alignItems: "center",
       }}
     >
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(heroRef)}>Home</span>
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(searchRef)}>Search</span>
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(featuredRef)}>Featured</span>
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(howRef)}>How It Works</span>
-      <span style={{ cursor: "pointer" }} onClick={() => navigate("/contact")}>Contact</span>
+      <span onClick={() => scrollToSection(heroRef)}>Home</span>
+      <span onClick={() => scrollToSection(searchRef)}>Search</span>
+      <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
+      <span onClick={() => scrollToSection(howRef)}>How It Works</span>
+      <span onClick={() => navigate("/contact")}>Contact</span>
 
       <button
         onClick={() => navigate("/login-choice")}
@@ -139,6 +137,7 @@ const handleSearch = async () => {
           backgroundColor: colors.primary,
           color: "#fff",
           borderRadius: "0.5rem",
+          border: "none",
         }}
       >
         Login
@@ -150,6 +149,7 @@ const handleSearch = async () => {
           backgroundColor: colors.secondary,
           color: "#fff",
           borderRadius: "0.5rem",
+          border: "none",
         }}
       >
         Signup
@@ -161,7 +161,7 @@ const handleSearch = async () => {
       className="hamburger"
       style={{
         display: "none",
-        fontSize: "1.5rem",
+        fontSize: "1.8rem",
         background: "none",
         border: "none",
         cursor: "pointer",
@@ -172,58 +172,85 @@ const handleSearch = async () => {
     </button>
   </div>
 
-  {/* ✅ Mobile Menu (absolute overlay, no unwanted space) */}
+  {/* ✅ Mobile Slide-in Menu */}
   {menuOpen && (
-    <div
+    <motion.div
+      initial={{ x: "100%" }}
+      animate={{ x: 0 }}
+      exit={{ x: "100%" }}
+      transition={{ duration: 0.3 }}
       className="mobile-menu"
       style={{
-        position: "absolute",
-        top: "100%",
-        left: 0,
-        width: "100%",
+        position: "fixed",
+        top: 0,
+        right: 0,
+        height: "100vh",
+        width: "70%",
         backgroundColor: "#fff",
         display: "flex",
         flexDirection: "column",
-        padding: "1rem",
-        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+        padding: "2rem 1rem",
+        boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
+        zIndex: 2000,
       }}
     >
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(heroRef)}>Home</span>
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(searchRef)}>Search</span>
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(featuredRef)}>Featured</span>
-      <span style={{ cursor: "pointer" }} onClick={() => scrollToSection(howRef)}>How It Works</span>
-      <span style={{ cursor: "pointer" }} onClick={() => navigate("/contact")}>Contact</span>
+      <button
+        style={{
+          alignSelf: "flex-end",
+          fontSize: "1.5rem",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          marginBottom: "1.5rem",
+        }}
+        onClick={() => setMenuOpen(false)}
+      >
+        ✖
+      </button>
+
+      <span onClick={() => scrollToSection(heroRef)}>Home</span>
+      <span onClick={() => scrollToSection(searchRef)}>Search</span>
+      <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
+      <span onClick={() => scrollToSection(howRef)}>How It Works</span>
+      <span onClick={() => navigate("/contact")}>Contact</span>
 
       <button
-        onClick={() => navigate("/login-choice")}
+        onClick={() => { navigate("/login-choice"); setMenuOpen(false); }}
         style={{
-          marginTop: "1rem",
-          padding: "0.5rem 1rem",
+          marginTop: "2rem",
+          padding: "0.75rem 1rem",
           backgroundColor: colors.primary,
           color: "#fff",
           borderRadius: "0.5rem",
+          border: "none",
         }}
       >
         Login
       </button>
       <button
-        onClick={() => navigate("/signup-choice")}
+        onClick={() => { navigate("/signup-choice"); setMenuOpen(false); }}
         style={{
-          marginTop: "0.5rem",
-          padding: "0.5rem 1rem",
+          marginTop: "0.75rem",
+          padding: "0.75rem 1rem",
           backgroundColor: colors.secondary,
           color: "#fff",
           borderRadius: "0.5rem",
+          border: "none",
         }}
       >
         Signup
       </button>
-    </div>
+    </motion.div>
   )}
 
-  {/* Inline CSS for responsiveness */}
+  {/* Responsive Styles */}
   <style>
     {`
+      nav span {
+        cursor: pointer;
+        margin: 0.5rem 0;
+      }
+
       @media (max-width: 768px) {
         .nav-links {
           display: none !important;
@@ -235,6 +262,7 @@ const handleSearch = async () => {
     `}
   </style>
 </nav>
+
       
       {/* Hero Section */}
       <section
