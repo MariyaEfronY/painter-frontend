@@ -86,7 +86,6 @@ const handleSearch = async () => {
       }}
     >
       {/* Navigation */}
-
 <nav
   style={{
     position: "fixed",
@@ -105,14 +104,19 @@ const handleSearch = async () => {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "0.8rem 1rem",
+      padding: "0.6rem 1rem",
     }}
   >
-    {/* ✅ Logo instead of text */}
+    {/* ✅ Larger Logo */}
     <img
       src={logo}
       alt="PainterBooking Logo"
-      style={{ height: "45px", cursor: "pointer" }}
+      style={{
+        height: "60px", // bigger for visibility
+        width: "auto",
+        objectFit: "contain",
+        cursor: "pointer",
+      }}
       onClick={() => scrollToSection(heroRef)}
     />
 
@@ -216,7 +220,10 @@ const handleSearch = async () => {
       <span onClick={() => navigate("/contact")}>Contact</span>
 
       <button
-        onClick={() => { navigate("/login-choice"); setMenuOpen(false); }}
+        onClick={() => {
+          navigate("/login-choice");
+          setMenuOpen(false);
+        }}
         style={{
           marginTop: "2rem",
           padding: "0.75rem 1rem",
@@ -229,7 +236,10 @@ const handleSearch = async () => {
         Login
       </button>
       <button
-        onClick={() => { navigate("/signup-choice"); setMenuOpen(false); }}
+        onClick={() => {
+          navigate("/signup-choice");
+          setMenuOpen(false);
+        }}
         style={{
           marginTop: "0.75rem",
           padding: "0.75rem 1rem",
