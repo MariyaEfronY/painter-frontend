@@ -190,7 +190,7 @@ const handleSearch = async () => {
       top: 0,
       right: 0,
       height: "100vh",   // ✅ full height
-      width: "70%",
+      width: "100%",
       backgroundColor: "#fff",
       display: "flex",
       flexDirection: "column",
