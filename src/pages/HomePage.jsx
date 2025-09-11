@@ -30,17 +30,21 @@ const HomePage = () => {
     setMenuOpen(false);
   };
 
-  // ✅ Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [menuOpen]);
+// ✅ Prevent body scroll when mobile menu is open
+useEffect(() => {
+  if (menuOpen) {
+    document.body.style.overflow = "hidden";
+    document.body.style.height = "100%";   // prevent white gap
+  } else {
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+  }
+  return () => {
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+  };
+}, [menuOpen]);
+
 
   useEffect(() => {
     const fetchPainters = async () => {
@@ -187,57 +191,55 @@ const HomePage = () => {
         </div>
 
         {/* ✅ Dimmed Overlay */}
-        {menuOpen && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100vh",
-              backgroundColor: "rgba(0,0,0,0.4)",
-              zIndex: 1500,
-            }}
-            onClick={() => setMenuOpen(false)}
-          />
-        )}
+{menuOpen && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,                  // shorthand for top:0, right:0, bottom:0, left:0
+      backgroundColor: "rgba(0,0,0,0.4)",
+      zIndex: 1500,
+    }}
+    onClick={() => setMenuOpen(false)}
+  />
+)}
 
-        {/* ✅ Mobile Menu */}
-        {menuOpen && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: "fixed",
-              top: 0,
-              right: 0,
-              height: "100vh",
-              width: "75%",
-              backgroundColor: "#fff",
-              display: "flex",
-              flexDirection: "column",
-              padding: "2rem 1rem",
-              boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
-              zIndex: 2000,
-              overflowY: "auto",
-            }}
-          >
-            <button
-              style={{
-                alignSelf: "flex-end",
-                fontSize: "1.5rem",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                marginBottom: "1.5rem",
-              }}
-              onClick={() => setMenuOpen(false)}
-            >
-              ✖
-            </button>
 
+{/* ✅ Mobile Menu */}
+{menuOpen && (
+  <motion.div
+    initial={{ x: "100%" }}
+    animate={{ x: 0 }}
+    exit={{ x: "100%" }}
+    transition={{ duration: 0.3 }}
+    style={{
+      position: "fixed",
+      top: 0,
+      right: 0,
+      bottom: 0,
+      width: "75%",
+      backgroundColor: "#fff",
+      display: "flex",
+      flexDirection: "column",
+      padding: "2rem 1rem",
+      boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
+      zIndex: 2000,
+      overflowY: "auto",
+    }}
+  >
+    {/* Close button */}
+    <button
+      style={{
+        alignSelf: "flex-end",
+        fontSize: "1.5rem",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        marginBottom: "1.5rem",
+      }}
+      onClick={() => setMenuOpen(false)}
+    >
+      ✖
+    </button>
             <span onClick={() => scrollToSection(heroRef)}>Home</span>
             <span onClick={() => scrollToSection(searchRef)}>Search</span>
             <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
