@@ -415,33 +415,49 @@ useEffect(() => {
 </section>
 
 
-      {searchResults.length > 0 && (
-  <section style={{ padding: "3rem 2rem", backgroundColor: colors.background }}>
-    <h2 style={{ textAlign: "center", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem" }}>🔍 Search Results</h2>
-
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2rem" }}>
-      {searchResults.map((p) => (
-        <motion.div key={p._id} whileHover={{ scale: 1.05 }} style={{ backgroundColor: colors.cardBg, borderRadius: "1rem", padding: "1.5rem", textAlign: "center", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
+  {/* 🔍 Search Results */}
+{searchResults.length > 0 && (
+  <div className="mt-12">
+    <h2 className="text-2xl font-bold mb-6 text-center">
+      🔍 Search Results
+    </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {searchResults.map((painter) => (
+        <div
+          key={painter._id}
+          className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer"
+          onClick={() => navigate(`/painter/${painter._id}`)}
+        >
+          {/* Painter Image */}
           <img
-            src={p.profileImage || "/default-avatar.png"}
-            alt={p.name}
-            style={{ width: "6rem", height: "6rem", borderRadius: "50%", margin: "0 auto 1rem", objectFit: "cover" }}
+            src={painter.profileImage || "/default-avatar.png"}
+            alt={painter.name}
+            className="w-32 h-32 object-cover rounded-full mx-auto mb-4 border-4 border-gray-100"
           />
-          <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
-          <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>{p.city}</p>
-          <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", color: colors.textMuted }}>{p.bio || "No bio available"}</p>
-          <button
-            onClick={() => navigate(`/painters/${p._id}`)}
-            style={{ marginTop: "1rem", backgroundColor: colors.secondary, color: "#fff", padding: "0.5rem 1rem", borderRadius: "0.5rem", cursor: "pointer" }}
-          >
-            View Profile
-          </button>
-        </motion.div>
+
+          {/* Painter Info */}
+          <h3 className="text-lg font-semibold text-gray-800 text-center">
+            {painter.name}
+          </h3>
+          <p className="text-sm text-gray-500 text-center">{painter.city}</p>
+          <p className="text-sm text-gray-500 text-center">
+            {painter.workExperience} yrs experience
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 mt-2">
+            {painter.specification?.map((spec, i) => (
+              <span
+                key={i}
+                className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full"
+              >
+                {spec}
+              </span>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
-  </section>
+  </div>
 )}
-
 
 
 
