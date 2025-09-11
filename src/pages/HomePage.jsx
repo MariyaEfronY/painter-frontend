@@ -178,81 +178,83 @@ const handleSearch = async () => {
   </div>
 
   {/* ✅ Mobile Slide-in Menu */}
-  {menuOpen && (
-    <motion.div
-      initial={{ x: "100%" }}
-      animate={{ x: 0 }}
-      exit={{ x: "100%" }}
-      transition={{ duration: 0.3 }}
-      className="mobile-menu"
+{menuOpen && (
+  <motion.div
+    initial={{ x: "100%" }}
+    animate={{ x: 0 }}
+    exit={{ x: "100%" }}
+    transition={{ duration: 0.3 }}
+    className="mobile-menu"
+    style={{
+      position: "fixed",
+      top: 0,
+      right: 0,
+      height: "100vh",   // ✅ full height
+      width: "70%",
+      backgroundColor: "#fff",
+      display: "flex",
+      flexDirection: "column",
+      padding: "2rem 1rem",
+      boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
+      zIndex: 2000,
+      overflowY: "auto", // ✅ allow scrolling inside menu (not whole page)
+    }}
+  >
+    <button
       style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        height: "100vh",
-        width: "70%",
-        backgroundColor: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        padding: "2rem 1rem",
-        boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
-        zIndex: 2000,
+        alignSelf: "flex-end",
+        fontSize: "1.5rem",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        marginBottom: "1.5rem",
+      }}
+      onClick={() => setMenuOpen(false)}
+    >
+      ✖
+    </button>
+
+    <span onClick={() => scrollToSection(heroRef)}>Home</span>
+    <span onClick={() => scrollToSection(searchRef)}>Search</span>
+    <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
+    <span onClick={() => scrollToSection(howRef)}>How It Works</span>
+    <span onClick={() => navigate("/contact")}>Contact</span>
+
+    <button
+      onClick={() => {
+        navigate("/login-choice");
+        setMenuOpen(false);
+      }}
+      style={{
+        marginTop: "2rem",
+        padding: "0.75rem 1rem",
+        backgroundColor: colors.primary,
+        color: "#fff",
+        borderRadius: "0.5rem",
+        border: "none",
       }}
     >
-      <button
-        style={{
-          alignSelf: "flex-end",
-          fontSize: "1.5rem",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          marginBottom: "1.5rem",
-        }}
-        onClick={() => setMenuOpen(false)}
-      >
-        ✖
-      </button>
+      Login
+    </button>
+    <button
+      onClick={() => {
+        navigate("/signup-choice");
+        setMenuOpen(false);
+      }}
+      style={{
+        marginTop: "0.75rem",
+        padding: "0.75rem 1rem",
+        backgroundColor: colors.secondary,
+        color: "#fff",
+        borderRadius: "0.5rem",
+        border: "none",
+      }}
+    >
+      Signup
+    </button>
+  </motion.div>
+)}
 
-      <span onClick={() => scrollToSection(heroRef)}>Home</span>
-      <span onClick={() => scrollToSection(searchRef)}>Search</span>
-      <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
-      <span onClick={() => scrollToSection(howRef)}>How It Works</span>
-      <span onClick={() => navigate("/contact")}>Contact</span>
-
-      <button
-        onClick={() => {
-          navigate("/login-choice");
-          setMenuOpen(false);
-        }}
-        style={{
-          marginTop: "2rem",
-          padding: "0.75rem 1rem",
-          backgroundColor: colors.primary,
-          color: "#fff",
-          borderRadius: "0.5rem",
-          border: "none",
-        }}
-      >
-        Login
-      </button>
-      <button
-        onClick={() => {
-          navigate("/signup-choice");
-          setMenuOpen(false);
-        }}
-        style={{
-          marginTop: "0.75rem",
-          padding: "0.75rem 1rem",
-          backgroundColor: colors.secondary,
-          color: "#fff",
-          borderRadius: "0.5rem",
-          border: "none",
-        }}
-      >
-        Signup
-      </button>
-    </motion.div>
-  )}
 
   {/* Responsive Styles */}
   <style>
