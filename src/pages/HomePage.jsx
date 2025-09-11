@@ -7,7 +7,8 @@ import axios from "axios";
 import API from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import heroAnimation from "../assets/hero-painter.json";
-import logo from "../assets/m_p_logo";
+import logo from "../assets/m_p_logo.png";
+
 
 const HomePage = () => {
   const [painters, setPainters] = useState([]);
@@ -109,7 +110,7 @@ const handleSearch = async () => {
   >
     {/* ✅ Logo instead of text */}
     <img
-      src={m_p_logo}
+      src={logo}
       alt="PainterBooking Logo"
       style={{ height: "45px", cursor: "pointer" }}
       onClick={() => scrollToSection(heroRef)}
