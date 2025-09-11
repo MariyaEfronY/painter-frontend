@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import heroAnimation from "../assets/hero-painter.json";
 import logo from "../assets/m_p_logo.png";
 
-
 const HomePage = () => {
   const [painters, setPainters] = useState([]);
   const [phone, setPhone] = useState("");
@@ -20,7 +19,7 @@ const HomePage = () => {
 
   const navigate = useNavigate();
 
-  // Section refs for smooth scroll
+  // Section refs
   const heroRef = useRef(null);
   const searchRef = useRef(null);
   const featuredRef = useRef(null);
@@ -28,13 +27,27 @@ const HomePage = () => {
 
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth" });
-    setMenuOpen(false); // close menu on mobile after click
+    setMenuOpen(false);
   };
+
+  // ✅ Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     const fetchPainters = async () => {
       try {
-        const res = await axios.get("https://painter-backend-inky.vercel.app/api/painter/main");
+        const res = await axios.get(
+          "https://painter-backend-inky.vercel.app/api/painter/main"
+        );
         setPainters(res.data);
       } catch (err) {
         console.error("❌ Failed to load painters:", err.message);
@@ -43,30 +56,26 @@ const HomePage = () => {
     fetchPainters();
   }, []);
 
-const handleSearch = async () => {
-  if (!phone && !city) return; // prevent empty search
+  const handleSearch = async () => {
+    if (!phone && !city) return;
 
-  try {
-    setLoading(true);
-    setSearchResults([]); // clear previous results
+    try {
+      setLoading(true);
+      setSearchResults([]);
 
-    const params = {};
-    if (phone) params.phoneNumber = phone; // matches schema
-    if (city) params.city = city;
+      const params = {};
+      if (phone) params.phoneNumber = phone;
+      if (city) params.city = city;
 
-    const { data } = await API.get("/painters/search", { params });
-
-    setSearchResults(data); // data will be [] if no results
-  } catch (err) {
-    console.error("Search failed:", err);
-    setSearchResults([]);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
+      const { data } = await API.get("/painters/search", { params });
+      setSearchResults(data);
+    } catch (err) {
+      console.error("Search failed:", err);
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const colors = {
     primary: "#ec4899",
@@ -86,197 +95,205 @@ const handleSearch = async () => {
       }}
     >
       {/* Navigation */}
-<nav
-  style={{
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    backgroundColor: "#fff",
-    zIndex: 1000,
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-  }}
->
-  <div
-    style={{
-      maxWidth: "1200px",
-      margin: "0 auto",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "0.6rem 1rem",
-    }}
-  >
-    {/* ✅ Larger Logo */}
-    <img
-      src={logo}
-      alt="PainterBooking Logo"
-      style={{
-        height: "60px", // bigger for visibility
-        width: "auto",
-        objectFit: "contain",
-        cursor: "pointer",
-      }}
-      onClick={() => scrollToSection(heroRef)}
-    />
-
-    {/* Desktop Menu */}
-    <div
-      className="nav-links"
-      style={{
-        display: "flex",
-        gap: "1.5rem",
-        alignItems: "center",
-      }}
-    >
-      <span onClick={() => scrollToSection(heroRef)}>Home</span>
-      <span onClick={() => scrollToSection(searchRef)}>Search</span>
-      <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
-      <span onClick={() => scrollToSection(howRef)}>How It Works</span>
-      <span onClick={() => navigate("/contact")}>Contact</span>
-
-      <button
-        onClick={() => navigate("/login-choice")}
+      <nav
         style={{
-          padding: "0.5rem 1rem",
-          backgroundColor: colors.primary,
-          color: "#fff",
-          borderRadius: "0.5rem",
-          border: "none",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          backgroundColor: "#fff",
+          zIndex: 1000,
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
         }}
       >
-        Login
-      </button>
-      <button
-        onClick={() => navigate("/signup-choice")}
-        style={{
-          padding: "0.5rem 1rem",
-          backgroundColor: colors.secondary,
-          color: "#fff",
-          borderRadius: "0.5rem",
-          border: "none",
-        }}
-      >
-        Signup
-      </button>
-    </div>
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0.6rem 1rem",
+          }}
+        >
+          {/* Logo */}
+          <img
+            src={logo}
+            alt="PainterBooking Logo"
+            style={{
+              height: "60px",
+              width: "auto",
+              objectFit: "contain",
+              cursor: "pointer",
+            }}
+            onClick={() => scrollToSection(heroRef)}
+          />
 
-    {/* Hamburger (visible on mobile) */}
-    <button
-      className="hamburger"
-      style={{
-        display: "none",
-        fontSize: "1.8rem",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-      }}
-      onClick={() => setMenuOpen(!menuOpen)}
-    >
-      ☰
-    </button>
-  </div>
+          {/* Desktop Menu */}
+          <div
+            className="nav-links"
+            style={{
+              display: "flex",
+              gap: "1.5rem",
+              alignItems: "center",
+            }}
+          >
+            <span onClick={() => scrollToSection(heroRef)}>Home</span>
+            <span onClick={() => scrollToSection(searchRef)}>Search</span>
+            <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
+            <span onClick={() => scrollToSection(howRef)}>How It Works</span>
+            <span onClick={() => navigate("/contact")}>Contact</span>
 
-  {/* ✅ Mobile Slide-in Menu */}
-{menuOpen && (
-  <motion.div
-    initial={{ x: "100%" }}
-    animate={{ x: 0 }}
-    exit={{ x: "100%" }}
-    transition={{ duration: 0.3 }}
-    className="mobile-menu"
-    style={{
-      position: "fixed",
-      top: 0,
-      right: 0,
-      height: "100vh",   // ✅ full height
-      width: "100%",
-      backgroundColor: "#fff",
-      display: "flex",
-      flexDirection: "column",
-      padding: "2rem 1rem",
-      boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
-      zIndex: 2000,
-      overflowY: "auto", // ✅ allow scrolling inside menu (not whole page)
-    }}
-  >
-    <button
-      style={{
-        alignSelf: "flex-end",
-        fontSize: "1.5rem",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        marginBottom: "1.5rem",
-      }}
-      onClick={() => setMenuOpen(false)}
-    >
-      ✖
-    </button>
+            <button
+              onClick={() => navigate("/login-choice")}
+              style={{
+                padding: "0.5rem 1rem",
+                backgroundColor: colors.primary,
+                color: "#fff",
+                borderRadius: "0.5rem",
+                border: "none",
+              }}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => navigate("/signup-choice")}
+              style={{
+                padding: "0.5rem 1rem",
+                backgroundColor: colors.secondary,
+                color: "#fff",
+                borderRadius: "0.5rem",
+                border: "none",
+              }}
+            >
+              Signup
+            </button>
+          </div>
 
-    <span onClick={() => scrollToSection(heroRef)}>Home</span>
-    <span onClick={() => scrollToSection(searchRef)}>Search</span>
-    <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
-    <span onClick={() => scrollToSection(howRef)}>How It Works</span>
-    <span onClick={() => navigate("/contact")}>Contact</span>
+          {/* Hamburger */}
+          <button
+            className="hamburger"
+            style={{
+              display: "none",
+              fontSize: "1.8rem",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </button>
+        </div>
 
-    <button
-      onClick={() => {
-        navigate("/login-choice");
-        setMenuOpen(false);
-      }}
-      style={{
-        marginTop: "2rem",
-        padding: "0.75rem 1rem",
-        backgroundColor: colors.primary,
-        color: "#fff",
-        borderRadius: "0.5rem",
-        border: "none",
-      }}
-    >
-      Login
-    </button>
-    <button
-      onClick={() => {
-        navigate("/signup-choice");
-        setMenuOpen(false);
-      }}
-      style={{
-        marginTop: "0.75rem",
-        padding: "0.75rem 1rem",
-        backgroundColor: colors.secondary,
-        color: "#fff",
-        borderRadius: "0.5rem",
-        border: "none",
-      }}
-    >
-      Signup
-    </button>
-  </motion.div>
-)}
+        {/* ✅ Dimmed Overlay */}
+        {menuOpen && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100vh",
+              backgroundColor: "rgba(0,0,0,0.4)",
+              zIndex: 1500,
+            }}
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
 
+        {/* ✅ Mobile Menu */}
+        {menuOpen && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              height: "100vh",
+              width: "75%",
+              backgroundColor: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              padding: "2rem 1rem",
+              boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
+              zIndex: 2000,
+              overflowY: "auto",
+            }}
+          >
+            <button
+              style={{
+                alignSelf: "flex-end",
+                fontSize: "1.5rem",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                marginBottom: "1.5rem",
+              }}
+              onClick={() => setMenuOpen(false)}
+            >
+              ✖
+            </button>
 
-  {/* Responsive Styles */}
-  <style>
-    {`
-      nav span {
-        cursor: pointer;
-        margin: 0.5rem 0;
-      }
+            <span onClick={() => scrollToSection(heroRef)}>Home</span>
+            <span onClick={() => scrollToSection(searchRef)}>Search</span>
+            <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
+            <span onClick={() => scrollToSection(howRef)}>How It Works</span>
+            <span onClick={() => navigate("/contact")}>Contact</span>
 
-      @media (max-width: 768px) {
-        .nav-links {
-          display: none !important;
-        }
-        .hamburger {
-          display: block !important;
-        }
-      }
-    `}
-  </style>
-</nav>
+            <button
+              onClick={() => {
+                navigate("/login-choice");
+                setMenuOpen(false);
+              }}
+              style={{
+                marginTop: "2rem",
+                padding: "0.75rem 1rem",
+                backgroundColor: colors.primary,
+                color: "#fff",
+                borderRadius: "0.5rem",
+                border: "none",
+              }}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => {
+                navigate("/signup-choice");
+                setMenuOpen(false);
+              }}
+              style={{
+                marginTop: "0.75rem",
+                padding: "0.75rem 1rem",
+                backgroundColor: colors.secondary,
+                color: "#fff",
+                borderRadius: "0.5rem",
+                border: "none",
+              }}
+            >
+              Signup
+            </button>
+          </motion.div>
+        )}
 
-      
+        {/* Responsive Styles */}
+        <style>
+          {`
+            nav span {
+              cursor: pointer;
+              margin: 0.5rem 0;
+            }
+            @media (max-width: 768px) {
+              .nav-links { display: none !important; }
+              .hamburger { display: block !important; }
+            }
+          `}
+        </style>
+      </nav>
+
       {/* Hero Section */}
       <section
         ref={heroRef}
