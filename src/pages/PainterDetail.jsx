@@ -64,106 +64,72 @@ const PainterDetails = () => {
       }}
     >
       {/* Profile Section */}
-      <div style={{ textAlign: "center" }}>
+<div style={{ textAlign: "center" }}>
+  <img
+    src={painter.profileImage || "/default-avatar.png"}
+    alt={painter.name}
+    style={{
+      width: "120px",          // smaller profile image
+      height: "120px",
+      borderRadius: "50%",
+      margin: "0 auto",
+      border: "3px solid #ddd",
+      objectFit: "cover",
+      boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+    }}
+  />
+  <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", marginTop: "0.8rem" }}>
+    {painter.name}
+  </h1>
+  <p style={{ color: "#555", fontSize: "0.9rem" }}>📍 {painter.city}</p>
+  <p style={{ marginTop: "0.5rem", fontSize: "0.85rem", lineHeight: "1.4", color: "#333" }}>
+    {painter.bio}
+  </p>
+</div>
+
+{/* Gallery Section */}
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", // smaller card width
+    gap: "1rem",
+  }}
+>
+  {painter.gallery?.length > 0 ? (
+    painter.gallery.map((img, index) => (
+      <div
+        key={index}
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: "0.75rem",
+          boxShadow: "0 3px 6px rgba(0,0,0,0.1)",
+          overflow: "hidden",
+          transition: "transform 0.2s ease-in-out",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
         <img
-          src={painter.profileImage || "/default-avatar.png"}
-          alt={painter.name}
+          src={img.image}
+          alt={img.description || "Project image"}
           style={{
-            width: "150px",
-            height: "150px",
-            borderRadius: "50%",
-            margin: "0 auto",
-            border: "4px solid #ddd",
+            width: "100%",
+            height: "150px", // reduced height
             objectFit: "cover",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
           }}
         />
-        <h1
-          style={{
-            fontSize: "1.75rem",
-            fontWeight: "bold",
-            marginTop: "1rem",
-          }}
-        >
-          {painter.name}
-        </h1>
-        <p style={{ color: "#555", fontSize: "0.95rem" }}>
-          📍 {painter.city}
-        </p>
-        <p
-          style={{
-            marginTop: "0.5rem",
-            fontSize: "0.9rem",
-            lineHeight: "1.4",
-            color: "#333",
-          }}
-        >
-          {painter.bio}
-        </p>
+        <div style={{ padding: "0.5rem" }}>
+          <p style={{ fontSize: "0.8rem", color: "#444", lineHeight: "1.3" }}>
+            {img.description || "No description provided."}
+          </p>
+        </div>
       </div>
+    ))
+  ) : (
+    <p style={{ color: "#777" }}>No projects uploaded yet.</p>
+  )}
+</div>
 
-      {/* Gallery Section */}
-      <h2
-        style={{
-          fontSize: "1.25rem",
-          fontWeight: "600",
-          marginTop: "2rem",
-          marginBottom: "1rem",
-        }}
-      >
-        Projects
-      </h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "1rem",
-        }}
-      >
-        {painter.gallery?.length > 0 ? (
-          painter.gallery.map((img, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "0.75rem",
-                boxShadow: "0 3px 6px rgba(0,0,0,0.1)",
-                overflow: "hidden",
-                transition: "transform 0.2s ease-in-out",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.02)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <img
-                src={img.image} // ✅ Cloudinary URL
-                alt={img.description || "Project image"}
-                style={{
-                  width: "100%",
-                  height: "180px",
-                  objectFit: "cover",
-                }}
-              />
-              <div style={{ padding: "0.75rem" }}>
-                <p
-                  style={{
-                    fontSize: "0.85rem",
-                    color: "#444",
-                    lineHeight: "1.3",
-                  }}
-                >
-                  {img.description || "No description provided."}
-                </p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p style={{ color: "#777" }}>No projects uploaded yet.</p>
-        )}
-      </div>
 
       {/* Booking Button */}
       <button
