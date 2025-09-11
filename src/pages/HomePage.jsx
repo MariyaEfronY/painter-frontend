@@ -60,19 +60,19 @@ useEffect(() => {
     fetchPainters();
   }, []);
 
-  const handleSearch = async () => {
+const handleSearch = async () => {
   if (!phone) return; // phone is required
 
   try {
     setLoading(true);
-    setSearchResults([]); // clear old results
+    setSearchResults([]);
 
     const { data } = await API.get("/painter/search", {
       params: { phoneNumber: phone },
     });
 
-    // ✅ backend returns single painter object
-    setSearchResults([data]); // wrap in array for rendering
+    // ✅ backend already returns array
+    setSearchResults(data);
   } catch (err) {
     console.error("Search failed:", err);
     setSearchResults([]);
@@ -417,47 +417,81 @@ useEffect(() => {
 
   {/* 🔍 Search Results */}
 {searchResults.length > 0 && (
-  <div className="mt-12">
-    <h2 className="text-2xl font-bold mb-6 text-center">
+  <section style={{ padding: "4rem 2rem" }}>
+    <h2
+      style={{
+        textAlign: "center",
+        fontSize: "1.75rem",
+        fontWeight: "bold",
+        marginBottom: "2.5rem",
+      }}
+    >
       🔍 Search Results
     </h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {searchResults.map((painter) => (
-        <div
-          key={painter._id}
-          className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition cursor-pointer"
-          onClick={() => navigate(`/painter/${painter._id}`)}
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        gap: "2rem",
+      }}
+    >
+      {searchResults.map((p) => (
+        <motion.div
+          key={p._id}
+          whileHover={{ scale: 1.05 }}
+          style={{
+            backgroundColor: colors.cardBg,
+            borderRadius: "1rem",
+            padding: "1.5rem",
+            textAlign: "center",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+          }}
         >
-          {/* Painter Image */}
           <img
-            src={painter.profileImage || "/default-avatar.png"}
-            alt={painter.name}
-            className="w-32 h-32 object-cover rounded-full mx-auto mb-4 border-4 border-gray-100"
+            src={p.profileImage || "/default-avatar.png"}
+            alt={p.name}
+            style={{
+              width: "6rem",
+              height: "6rem",
+              borderRadius: "50%",
+              margin: "0 auto 1rem",
+              objectFit: "cover",
+            }}
           />
-
-          {/* Painter Info */}
-          <h3 className="text-lg font-semibold text-gray-800 text-center">
-            {painter.name}
-          </h3>
-          <p className="text-sm text-gray-500 text-center">{painter.city}</p>
-          <p className="text-sm text-gray-500 text-center">
-            {painter.workExperience} yrs experience
+          <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
+          <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>{p.city}</p>
+          <p
+            style={{
+              fontSize: "0.75rem",
+              marginTop: "0.5rem",
+              color: colors.textMuted,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {p.bio}
           </p>
-          <div className="flex flex-wrap justify-center gap-2 mt-2">
-            {painter.specification?.map((spec, i) => (
-              <span
-                key={i}
-                className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full"
-              >
-                {spec}
-              </span>
-            ))}
-          </div>
-        </div>
+          <button
+            onClick={() => navigate(`/painter/${p._id}`)}
+            style={{
+              marginTop: "1rem",
+              backgroundColor: colors.secondary,
+              color: "#fff",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.5rem",
+              cursor: "pointer",
+            }}
+          >
+            View Profile
+          </button>
+        </motion.div>
       ))}
     </div>
-  </div>
+  </section>
 )}
+
 
 
 
