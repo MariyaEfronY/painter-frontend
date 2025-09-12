@@ -8,7 +8,7 @@ const SearchPainter = ({ colors }) => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchedPainter, setSearchedPainter] = useState(null);
-  const [notFound, setNotFound] = useState(false); // ✅ new state
+  const [notFound, setNotFound] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = async () => {
@@ -19,22 +19,26 @@ const SearchPainter = ({ colors }) => {
       setSearchedPainter(null);
       setNotFound(false);
 
-      // ✅ Correct endpoint
+      // ✅ Correct endpoint with /api prefix
       const { data } = await API.get("/painter/search", {
-        params: { phoneNumber: phone },
+        params: { phoneNumber: phone.trim() },
       });
 
-      setSearchedPainter(data);
+      // if backend returns array, pick the first painter
+      if (Array.isArray(data)) {
+        setSearchedPainter(data[0] || null);
+        if (!data[0]) setNotFound(true);
+      } else {
+        setSearchedPainter(data);
+      }
     } catch (err) {
-      console.error("Search failed:", err);
+      console.error("❌ Search failed:", err);
 
-      // ✅ If backend returns 404 → show "not found"
       if (err.response && err.response.status === 404) {
         setNotFound(true);
       } else {
         setNotFound(false);
       }
-
       setSearchedPainter(null);
     } finally {
       setLoading(false);
@@ -82,6 +86,7 @@ const SearchPainter = ({ colors }) => {
               cursor: "pointer",
             }}
             onClick={handleSearch}
+            disabled={loading}
           >
             {loading ? "Searching..." : "Search"}
           </button>
@@ -114,6 +119,7 @@ const SearchPainter = ({ colors }) => {
                 boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
                 maxWidth: "320px",
                 margin: "0 auto",
+                cursor: "pointer",
               }}
               onClick={() => navigate(`/painter/${searchedPainter._id}`)}
             >
@@ -148,7 +154,10 @@ const SearchPainter = ({ colors }) => {
                 {searchedPainter.bio}
               </p>
               <button
-                onClick={() => navigate(`/painter/${searchedPainter._id}`)}
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent double navigation
+                  navigate(`/painter/${searchedPainter._id}`);
+                }}
                 style={{
                   marginTop: "1rem",
                   backgroundColor: colors.secondary,
@@ -167,7 +176,13 @@ const SearchPainter = ({ colors }) => {
         {/* ❌ No painter found */}
         {notFound && (
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: colors.textMuted }}>
+            <h3
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: colors.textMuted,
+              }}
+            >
               No painter found with this phone number
             </h3>
           </div>
