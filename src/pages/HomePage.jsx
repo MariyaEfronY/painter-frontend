@@ -12,11 +12,9 @@ import logo from "../assets/m_p_logo.png";
 const HomePage = () => {
   const [painters, setPainters] = useState([]);
   const [phone, setPhone] = useState("");
-  const [city, setCity] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [searchedPainter, setSearchedPainter] = useState(null);
   const navigate = useNavigate();
 
   // Section refs
@@ -60,22 +58,23 @@ useEffect(() => {
     fetchPainters();
   }, []);
 
+ 
+
 const handleSearch = async () => {
-  if (!phone) return;
+  if (!phone.trim()) return;
 
   try {
     setLoading(true);
-    setSearchResults([]);
+    setSearchedPainter(null);
 
     const { data } = await API.get("/painter/search", {
       params: { phoneNumber: phone },
     });
 
-    // ✅ backend now returns an array
-    setSearchResults(data);
+    setSearchedPainter(data); // ✅ store single painter object
   } catch (err) {
     console.error("Search failed:", err);
-    setSearchResults([]);
+    setSearchedPainter(null);
   } finally {
     setLoading(false);
   }
@@ -417,58 +416,74 @@ const handleSearch = async () => {
 
 
 {/* 🔍 Search Results */}
-{searchResults.length > 0 && (
+{searchedPainter && (
   <section style={{ padding: "4rem 2rem" }}>
-    <h2 style={{ textAlign: "center", fontSize: "1.75rem", fontWeight: "bold", marginBottom: "2.5rem" }}>
-      Search Results
+    <h2
+      style={{
+        textAlign: "center",
+        fontSize: "1.75rem",
+        fontWeight: "bold",
+        marginBottom: "2.5rem",
+      }}
+    >
+      Search Result
     </h2>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2rem" }}>
-      {searchResults.map((p) => (
-        <motion.div
-          key={p._id}
-          whileHover={{ scale: 1.05 }}
-          style={{
-            backgroundColor: "#fff",
-            borderRadius: "1rem",
-            padding: "1.5rem",
-            textAlign: "center",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-          }}
-        >
-          <img
-            src={p.profileImage || "/default-avatar.png"}
-            alt={p.name}
-            style={{
-              width: "6rem",
-              height: "6rem",
-              borderRadius: "50%",
-              margin: "0 auto 1rem",
-              objectFit: "cover",
-            }}
-          />
-          <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
-          <p style={{ fontSize: "0.875rem", color: "#666" }}>{p.city}</p>
-          <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", color: "#666" }}>
-            {p.workExperience} yrs experience
-          </p>
-          <button
-            onClick={() => navigate(`/painter/${p._id}`)}
-            style={{
-              marginTop: "1rem",
-              backgroundColor: "#9333ea",
-              color: "#fff",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              cursor: "pointer",
-            }}
-          >
-            View Profile
-          </button>
-        </motion.div>
-      ))}
-    </div>
+
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: "1rem",
+        padding: "1.5rem",
+        textAlign: "center",
+        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+        maxWidth: "300px",
+        margin: "0 auto",
+      }}
+    >
+      <img
+        src={searchedPainter.profileImage || "/default-avatar.png"}
+        alt={searchedPainter.name}
+        style={{
+          width: "6rem",
+          height: "6rem",
+          borderRadius: "50%",
+          margin: "0 auto 1rem",
+          objectFit: "cover",
+        }}
+      />
+      <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>
+        {searchedPainter.name}
+      </h3>
+      <p style={{ fontSize: "0.875rem", color: "#666" }}>
+        {searchedPainter.city}
+      </p>
+      <p
+        style={{
+          fontSize: "0.75rem",
+          marginTop: "0.5rem",
+          color: "#666",
+        }}
+      >
+        {searchedPainter.workExperience} yrs experience
+      </p>
+      <button
+        onClick={() => navigate(`/painters/${searchedPainter._id}`)}
+        style={{
+          marginTop: "1rem",
+          backgroundColor: "#9333ea",
+          color: "#fff",
+          padding: "0.5rem 1rem",
+          borderRadius: "0.5rem",
+          cursor: "pointer",
+        }}
+      >
+        View Profile
+      </button>
+    </motion.div>
   </section>
 )}
+
 
 
 
