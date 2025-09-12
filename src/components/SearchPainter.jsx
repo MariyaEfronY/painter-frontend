@@ -8,6 +8,7 @@ const SearchPainter = ({ colors }) => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchedPainter, setSearchedPainter] = useState(null);
+  const [notFound, setNotFound] = useState(false); // ✅ new state
   const navigate = useNavigate();
 
   const handleSearch = async () => {
@@ -16,14 +17,24 @@ const SearchPainter = ({ colors }) => {
     try {
       setLoading(true);
       setSearchedPainter(null);
+      setNotFound(false);
 
-      const { data } = await API.get("/painter/search", {
+      // ✅ Correct endpoint
+      const { data } = await API.get("/painters/search/phone", {
         params: { phoneNumber: phone },
       });
 
-      setSearchedPainter(data); // ✅ backend returns single painter
+      setSearchedPainter(data);
     } catch (err) {
       console.error("Search failed:", err);
+
+      // ✅ If backend returns 404 → show "not found"
+      if (err.response && err.response.status === 404) {
+        setNotFound(true);
+      } else {
+        setNotFound(false);
+      }
+
       setSearchedPainter(null);
     } finally {
       setLoading(false);
@@ -78,26 +89,20 @@ const SearchPainter = ({ colors }) => {
       </section>
 
       {/* 🎯 Search Result */}
-      {searchedPainter && (
-        <section style={{ padding: "4rem 2rem" }}>
-          <h2
-            style={{
-              textAlign: "center",
-              fontSize: "1.75rem",
-              fontWeight: "bold",
-              marginBottom: "2.5rem",
-            }}
-          >
-            Search Result
-          </h2>
+      <section style={{ padding: "4rem 2rem" }}>
+        {searchedPainter && (
+          <>
+            <h2
+              style={{
+                textAlign: "center",
+                fontSize: "1.75rem",
+                fontWeight: "bold",
+                marginBottom: "2.5rem",
+              }}
+            >
+              Search Result
+            </h2>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "2rem",
-            }}
-          >
             <motion.div
               key={searchedPainter._id}
               whileHover={{ scale: 1.05 }}
@@ -107,6 +112,8 @@ const SearchPainter = ({ colors }) => {
                 padding: "1.5rem",
                 textAlign: "center",
                 boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                maxWidth: "320px",
+                margin: "0 auto",
               }}
               onClick={() => navigate(`/painters/${searchedPainter._id}`)}
             >
@@ -154,9 +161,18 @@ const SearchPainter = ({ colors }) => {
                 View Profile
               </button>
             </motion.div>
+          </>
+        )}
+
+        {/* ❌ No painter found */}
+        {notFound && (
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: colors.textMuted }}>
+              No painter found with this phone number
+            </h3>
           </div>
-        </section>
-      )}
+        )}
+      </section>
     </>
   );
 };
