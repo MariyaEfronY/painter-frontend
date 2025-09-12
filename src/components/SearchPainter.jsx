@@ -20,7 +20,7 @@ const SearchPainter = ({ colors }) => {
       setNotFound(false);
 
       // ✅ Correct endpoint
-      const { data } = await API.get("/painters/search", {
+      const { data } = await API.get("/painter/search", {
         params: { phoneNumber: phone },
       });
 
@@ -115,7 +115,7 @@ const SearchPainter = ({ colors }) => {
                 maxWidth: "320px",
                 margin: "0 auto",
               }}
-              onClick={() => navigate(`/painters/${searchedPainter._id}`)}
+              onClick={() => navigate(`/painter/${searchedPainter._id}`)}
             >
               <img
                 src={searchedPainter.profileImage || "/default-avatar.png"}
@@ -148,7 +148,7 @@ const SearchPainter = ({ colors }) => {
                 {searchedPainter.bio}
               </p>
               <button
-                onClick={() => navigate(`/painters/${searchedPainter._id}`)}
+                onClick={() => navigate(`/painter/${searchedPainter._id}`)}
                 style={{
                   marginTop: "1rem",
                   backgroundColor: colors.secondary,
