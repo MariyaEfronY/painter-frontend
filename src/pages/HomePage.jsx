@@ -61,7 +61,7 @@ useEffect(() => {
   }, []);
 
 const handleSearch = async () => {
-  if (!phone) return; // phone is required
+  if (!phone) return;
 
   try {
     setLoading(true);
@@ -71,7 +71,7 @@ const handleSearch = async () => {
       params: { phoneNumber: phone },
     });
 
-    // ✅ backend already returns array
+    // ✅ backend now returns an array
     setSearchResults(data);
   } catch (err) {
     console.error("Search failed:", err);
@@ -80,6 +80,7 @@ const handleSearch = async () => {
     setLoading(false);
   }
 };
+
 
 
   const colors = {
@@ -415,32 +416,19 @@ const handleSearch = async () => {
 </section>
 
 
-  {/* 🔍 Search Results */}
+{/* 🔍 Search Results */}
 {searchResults.length > 0 && (
   <section style={{ padding: "4rem 2rem" }}>
-    <h2
-      style={{
-        textAlign: "center",
-        fontSize: "1.75rem",
-        fontWeight: "bold",
-        marginBottom: "2.5rem",
-      }}
-    >
-      🔍 Search Results
+    <h2 style={{ textAlign: "center", fontSize: "1.75rem", fontWeight: "bold", marginBottom: "2.5rem" }}>
+      Search Results
     </h2>
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-        gap: "2rem",
-      }}
-    >
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2rem" }}>
       {searchResults.map((p) => (
         <motion.div
           key={p._id}
           whileHover={{ scale: 1.05 }}
           style={{
-            backgroundColor: colors.cardBg,
+            backgroundColor: "#fff",
             borderRadius: "1rem",
             padding: "1.5rem",
             textAlign: "center",
@@ -459,25 +447,15 @@ const handleSearch = async () => {
             }}
           />
           <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
-          <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>{p.city}</p>
-          <p
-            style={{
-              fontSize: "0.75rem",
-              marginTop: "0.5rem",
-              color: colors.textMuted,
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-            }}
-          >
-            {p.bio}
+          <p style={{ fontSize: "0.875rem", color: "#666" }}>{p.city}</p>
+          <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", color: "#666" }}>
+            {p.workExperience} yrs experience
           </p>
           <button
             onClick={() => navigate(`/painter/${p._id}`)}
             style={{
               marginTop: "1rem",
-              backgroundColor: colors.secondary,
+              backgroundColor: "#9333ea",
               color: "#fff",
               padding: "0.5rem 1rem",
               borderRadius: "0.5rem",
@@ -491,10 +469,6 @@ const handleSearch = async () => {
     </div>
   </section>
 )}
-
-
-
-
 
 
 
