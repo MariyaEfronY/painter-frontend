@@ -8,13 +8,13 @@ import API from "../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import heroAnimation from "../assets/hero-painter.json";
 import logo from "../assets/m_p_logo.png";
+import SearchPainter from "../components/SearchPainter";
 
 const HomePage = () => {
   const [painters, setPainters] = useState([]);
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchedPainter, setSearchedPainter] = useState(null);
   const navigate = useNavigate();
 
   // Section refs
@@ -57,28 +57,6 @@ useEffect(() => {
     };
     fetchPainters();
   }, []);
-
- 
-
-const handleSearch = async () => {
-  if (!phone.trim()) return;
-
-  try {
-    setLoading(true);
-    setSearchedPainter(null);
-
-    const { data } = await API.get("/painter/search", {
-      params: { phoneNumber: phone },
-    });
-
-    setSearchedPainter(data); // ✅ store single painter object
-  } catch (err) {
-    console.error("Search failed:", err);
-    setSearchedPainter(null);
-  } finally {
-    setLoading(false);
-  }
-};
 
 
 
@@ -379,112 +357,8 @@ const handleSearch = async () => {
   </motion.div>
 </section>
 
-
-      {/* Search Section */}
-<section style={{ padding: "2.5rem 2rem", backgroundColor: colors.cardBg, boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-  <div style={{ maxWidth: "600px", margin: "0 auto", display: "flex", gap: "1rem" }}>
-    {/* Search by Phone */}
-    <input
-      type="text"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      placeholder="Enter mobile number..."
-      style={{
-        flex: 1,
-        padding: "0.75rem",
-        borderRadius: "0.5rem",
-        border: "1px solid #d1d5db",
-        outline: "none",
-        color: colors.textDark,
-      }}
-    />
-
-    <button
-      style={{
-        backgroundColor: colors.primary,
-        color: "#fff",
-        padding: "0.75rem 1.5rem",
-        borderRadius: "0.5rem",
-        cursor: "pointer",
-      }}
-      onClick={handleSearch}
-    >
-      {loading ? "Searching..." : "Search"}
-    </button>
-  </div>
-</section>
-
-
-{/* 🔍 Search Results */}
-{searchedPainter && (
-  <section style={{ padding: "4rem 2rem" }}>
-    <h2
-      style={{
-        textAlign: "center",
-        fontSize: "1.75rem",
-        fontWeight: "bold",
-        marginBottom: "2.5rem",
-      }}
-    >
-      Search Result
-    </h2>
-
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      style={{
-        backgroundColor: "#fff",
-        borderRadius: "1rem",
-        padding: "1.5rem",
-        textAlign: "center",
-        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-        maxWidth: "300px",
-        margin: "0 auto",
-      }}
-    >
-      <img
-        src={searchedPainter.profileImage || "/default-avatar.png"}
-        alt={searchedPainter.name}
-        style={{
-          width: "6rem",
-          height: "6rem",
-          borderRadius: "50%",
-          margin: "0 auto 1rem",
-          objectFit: "cover",
-        }}
-      />
-      <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>
-        {searchedPainter.name}
-      </h3>
-      <p style={{ fontSize: "0.875rem", color: "#666" }}>
-        {searchedPainter.city}
-      </p>
-      <p
-        style={{
-          fontSize: "0.75rem",
-          marginTop: "0.5rem",
-          color: "#666",
-        }}
-      >
-        {searchedPainter.workExperience} yrs experience
-      </p>
-      <button
-        onClick={() => navigate(`/painters/${searchedPainter._id}`)}
-        style={{
-          marginTop: "1rem",
-          backgroundColor: "#9333ea",
-          color: "#fff",
-          padding: "0.5rem 1rem",
-          borderRadius: "0.5rem",
-          cursor: "pointer",
-        }}
-      >
-        View Profile
-      </button>
-    </motion.div>
-  </section>
-)}
-
-
+ {/* Search  Painters */}
+<SearchPainter colors={colors} />
 
 
       {/* Featured Painters */}
