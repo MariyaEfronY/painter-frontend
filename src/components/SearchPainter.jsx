@@ -12,33 +12,30 @@ const SearchPainter = ({ colors }) => {
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    if (!phone.trim()) return;
+    const trimmedPhone = phone.trim();
+    if (!trimmedPhone || !/^\d{10}$/.test(trimmedPhone)) {
+      alert("Please enter a valid 10-digit phone number");
+      return;
+    }
 
     try {
       setLoading(true);
       setSearchedPainter(null);
       setNotFound(false);
 
-      // ✅ Correct endpoint with /api prefix
       const { data } = await API.get("/painter/search", {
-        params: { phoneNumber: phone.trim() },
+        params: { phoneNumber: trimmedPhone },
       });
 
-      // if backend returns array, pick the first painter
-      if (Array.isArray(data)) {
-        setSearchedPainter(data[0] || null);
-        if (!data[0]) setNotFound(true);
-      } else {
+      if (data && data._id) {
         setSearchedPainter(data);
+        navigate(`/painter/${data._id}`); // ✅ redirect immediately
+      } else {
+        setNotFound(true);
       }
     } catch (err) {
       console.error("❌ Search failed:", err);
-
-      if (err.response && err.response.status === 404) {
-        setNotFound(true);
-      } else {
-        setNotFound(false);
-      }
+      if (err.response && err.response.status === 404) setNotFound(true);
       setSearchedPainter(null);
     } finally {
       setLoading(false);
@@ -93,101 +90,21 @@ const SearchPainter = ({ colors }) => {
         </div>
       </section>
 
-      {/* 🎯 Search Result */}
-      <section style={{ padding: "4rem 2rem" }}>
-        {searchedPainter && (
-          <>
-            <h2
-              style={{
-                textAlign: "center",
-                fontSize: "1.75rem",
-                fontWeight: "bold",
-                marginBottom: "2.5rem",
-              }}
-            >
-              Search Result
-            </h2>
-
-            <motion.div
-              key={searchedPainter._id}
-              whileHover={{ scale: 1.05 }}
-              style={{
-                backgroundColor: colors.cardBg,
-                borderRadius: "1rem",
-                padding: "1.5rem",
-                textAlign: "center",
-                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                maxWidth: "320px",
-                margin: "0 auto",
-                cursor: "pointer",
-              }}
-              onClick={() => navigate(`/painter/${searchedPainter._id}`)}
-            >
-              <img
-                src={searchedPainter.profileImage || "/default-avatar.png"}
-                alt={searchedPainter.name}
-                style={{
-                  width: "6rem",
-                  height: "6rem",
-                  borderRadius: "50%",
-                  margin: "0 auto 1rem",
-                  objectFit: "cover",
-                }}
-              />
-              <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>
-                {searchedPainter.name}
-              </h3>
-              <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>
-                {searchedPainter.city}
-              </p>
-              <p
-                style={{
-                  fontSize: "0.75rem",
-                  marginTop: "0.5rem",
-                  color: colors.textMuted,
-                  overflow: "hidden",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                }}
-              >
-                {searchedPainter.bio}
-              </p>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // prevent double navigation
-                  navigate(`/painter/${searchedPainter._id}`);
-                }}
-                style={{
-                  marginTop: "1rem",
-                  backgroundColor: colors.secondary,
-                  color: "#fff",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.5rem",
-                  cursor: "pointer",
-                }}
-              >
-                View Profile
-              </button>
-            </motion.div>
-          </>
-        )}
-
-        {/* ❌ No painter found */}
-        {notFound && (
-          <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <h3
-              style={{
-                fontSize: "1.25rem",
-                fontWeight: "600",
-                color: colors.textMuted,
-              }}
-            >
-              No painter found with this phone number
-            </h3>
-          </div>
-        )}
-      </section>
+      {/* ❌ No painter found */}
+      {notFound && (
+        <section style={{ padding: "2rem" }}>
+          <h3
+            style={{
+              textAlign: "center",
+              fontSize: "1.25rem",
+              fontWeight: 600,
+              color: colors.textMuted,
+            }}
+          >
+            No painter found with this phone number
+          </h3>
+        </section>
+      )}
     </>
   );
 };
