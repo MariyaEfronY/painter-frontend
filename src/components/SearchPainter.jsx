@@ -20,7 +20,7 @@ const SearchPainter = ({ colors }) => {
       setNotFound(false);
 
       // ✅ Correct endpoint
-      const { data } = await API.get("/painters/search/phone", {
+      const { data } = await API.get("/painters/search", {
         params: { phoneNumber: phone },
       });
 
