@@ -70,7 +70,7 @@ useEffect(() => {
   };
 
   return (
-    <div
+     <div
       style={{
         backgroundColor: colors.background,
         color: colors.textDark,
@@ -96,21 +96,37 @@ useEffect(() => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            padding: "0.6rem 1rem",
+            padding: "0.8rem 1.5rem",
+            height: "70px",
           }}
         >
-          {/* Logo */}
-          <img
-            src={logo}
-            alt="PainterBooking Logo"
+          {/* ✅ Logo + Brand Name */}
+          <div
             style={{
-              height: "60px",
-              width: "auto",
-              objectFit: "contain",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
               cursor: "pointer",
             }}
             onClick={() => scrollToSection(heroRef)}
-          />
+          >
+            <img
+              src={logo}
+              alt="ff painter's Logo"
+              style={{ height: "40px", width: "40px", objectFit: "contain" }}
+            />
+            <span
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "bold",
+                background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              ff painter&apos;s
+            </span>
+          </div>
 
           {/* Desktop Menu */}
           <div
@@ -153,7 +169,7 @@ useEffect(() => {
             </button>
           </div>
 
-          {/* Hamburger */}
+          {/* Hamburger Button */}
           <button
             className="hamburger"
             style={{
@@ -169,56 +185,55 @@ useEffect(() => {
           </button>
         </div>
 
-        {/* ✅ Dimmed Overlay */}
-{menuOpen && (
-  <div
-    style={{
-      position: "fixed",
-      inset: 0,                  // shorthand for top:0, right:0, bottom:0, left:0
-      backgroundColor: "rgba(0,0,0,0.4)",
-      zIndex: 1500,
-    }}
-    onClick={() => setMenuOpen(false)}
-  />
-)}
+        {/* Mobile Overlay */}
+        {menuOpen && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.4)",
+              zIndex: 1500,
+            }}
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
 
-
-{/* ✅ Mobile Menu */}
-{menuOpen && (
-  <motion.div
-    initial={{ x: "100%" }}
-    animate={{ x: 0 }}
-    exit={{ x: "100%" }}
-    transition={{ duration: 0.3 }}
-    style={{
-      position: "fixed",
-      top: 0,
-      right: 0,
-      bottom: 0,
-      width: "75%",
-      backgroundColor: "#fff",
-      display: "flex",
-      flexDirection: "column",
-      padding: "2rem 1rem",
-      boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
-      zIndex: 2000,
-      overflowY: "auto",
-    }}
-  >
-    {/* Close button */}
-    <button
-      style={{
-        alignSelf: "flex-end",
-        fontSize: "1.5rem",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        marginBottom: "1.5rem",
-      }}
-      onClick={() => setMenuOpen(false)}
-    >
-      ✖
-    </button>
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: "75%",
+              backgroundColor: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              padding: "2rem 1rem",
+              boxShadow: "-2px 0 6px rgba(0,0,0,0.1)",
+              zIndex: 2000,
+              overflowY: "auto",
+            }}
+          >
+            {/* Close Button */}
+            <button
+              style={{
+                alignSelf: "flex-end",
+                fontSize: "1.5rem",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                marginBottom: "1.5rem",
+              }}
+              onClick={() => setMenuOpen(false)}
+            >
+              ✖
+            </button>
             <span onClick={() => scrollToSection(heroRef)}>Home</span>
             <span onClick={() => scrollToSection(searchRef)}>Search</span>
             <span onClick={() => scrollToSection(featuredRef)}>Featured</span>
