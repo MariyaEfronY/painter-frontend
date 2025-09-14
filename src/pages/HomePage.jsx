@@ -1,19 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Calendar, Paintbrush, Home } from "lucide-react";
 import Lottie from "lottie-react";
 import axios from "axios";
 import API from "../api/axiosConfig";
-import { useNavigate } from "react-router-dom";
 import heroAnimation from "../assets/hero-painter.json";
-import logo from "../assets/m_p_logo.png";
 import SearchPainter from "../components/SearchPainter";
 
 const HomePage = () => {
   const [painters, setPainters] = useState([]);
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -28,21 +24,20 @@ const HomePage = () => {
     setMenuOpen(false);
   };
 
-// ✅ Prevent body scroll when mobile menu is open
-useEffect(() => {
-  if (menuOpen) {
-    document.body.style.overflow = "hidden";
-    document.body.style.height = "100%";   // prevent white gap
-  } else {
-    document.body.style.overflow = "auto";
-    document.body.style.height = "auto";
-  }
-  return () => {
-    document.body.style.overflow = "auto";
-    document.body.style.height = "auto";
-  };
-}, [menuOpen]);
-
+  // ✅ Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100%";
+    } else {
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     const fetchPainters = async () => {
@@ -58,8 +53,6 @@ useEffect(() => {
     fetchPainters();
   }, []);
 
-
-
   const colors = {
     primary: "#ec4899",
     secondary: "#f472b6",
@@ -70,14 +63,14 @@ useEffect(() => {
   };
 
   return (
-     <div
+    <div
       style={{
         backgroundColor: colors.background,
         color: colors.textDark,
         fontFamily: "'Poppins', sans-serif",
       }}
     >
-      {/* Navigation */}
+      {/* ✅ Navigation */}
       <nav
         style={{
           position: "fixed",
@@ -100,33 +93,23 @@ useEffect(() => {
             height: "70px",
           }}
         >
-          {/* ✅ Logo + Brand Name */}
-          <div
+          {/* ✅ Brand Name Only (Animated Gradient Text) */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
               cursor: "pointer",
             }}
             onClick={() => scrollToSection(heroRef)}
           >
-            <img
-              src={logo}
-              alt="ff painter's Logo"
-              style={{ height: "40px", width: "40px", objectFit: "contain" }}
-            />
-            <span
-              style={{
-                fontSize: "1.25rem",
-                fontWeight: "bold",
-                background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              ff painter&apos;s
-            </span>
-          </div>
+            ff painter&apos;s
+          </motion.div>
 
           {/* Desktop Menu */}
           <div
@@ -290,7 +273,7 @@ useEffect(() => {
         </style>
       </nav>
 
-      {/* Hero Section */}
+      {/* ✅ Hero Section */}
       <section
         ref={heroRef}
         style={{
@@ -318,100 +301,218 @@ useEffect(() => {
           }}
         />
 
-  {/* Foreground Content */}
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 1 }}
-    style={{
-      position: "relative",
-      zIndex: 1,
-      textAlign: "center",
-      color: "#fff",
-      padding: "0 1.5rem",
-      maxWidth: "900px",
-    }}
-  >
-    <h1
-      style={{
-        fontSize: "2.75rem",
-        fontWeight: "bold",
-        marginBottom: "1rem",
-        lineHeight: 1.2,
-        textShadow: "0px 2px 10px rgba(0,0,0,0.6)",
-      }}
-    >
-      Find the Best Painters for Your Home & Office
-    </h1>
-    <p
-      style={{
-        fontSize: "1.25rem",
-        marginBottom: "2rem",
-        textShadow: "0px 2px 8px rgba(0,0,0,0.5)",
-      }}
-    >
-      Book trusted painters with just a few clicks. Browse profiles, check reviews, and hire instantly.
-    </p>
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      style={{
-        background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
-        color: "#fff",
-        padding: "0.75rem 2rem",
-        fontSize: "1rem",
-        fontWeight: 600,
-        borderRadius: "1rem",
-        border: "none",
-        cursor: "pointer",
-        boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
-      }}
-      onClick={() => scrollToSection(featuredRef)}
-    >
-      Find Painters
-    </motion.button>
-  </motion.div>
-</section>
+        {/* Foreground Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            textAlign: "center",
+            color: "#fff",
+            padding: "0 1.5rem",
+            maxWidth: "900px",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "2.75rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              lineHeight: 1.2,
+              textShadow: "0px 2px 10px rgba(0,0,0,0.6)",
+            }}
+          >
+            Find the Best Painters for Your Home & Office
+          </h1>
+          <p
+            style={{
+              fontSize: "1.25rem",
+              marginBottom: "2rem",
+              textShadow: "0px 2px 8px rgba(0,0,0,0.5)",
+            }}
+          >
+            Book trusted painters with just a few clicks. Browse profiles, check
+            reviews, and hire instantly.
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            style={{
+              background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+              color: "#fff",
+              padding: "0.75rem 2rem",
+              fontSize: "1rem",
+              fontWeight: 600,
+              borderRadius: "1rem",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
+            }}
+            onClick={() => scrollToSection(featuredRef)}
+          >
+            Find Painters
+          </motion.button>
+        </motion.div>
+      </section>
 
- {/* Search  Painters */}
-<SearchPainter colors={colors} />
+      {/* ✅ Search Section */}
+      <SearchPainter colors={colors} />
 
-
-      {/* Featured Painters */}
+      {/* ✅ Featured Painters */}
       <section ref={featuredRef} style={{ padding: "4rem 2rem" }}>
-        <h2 style={{ textAlign: "center", fontSize: "1.75rem", fontWeight: "bold", marginBottom: "2.5rem" }}>Featured Painters</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2rem" }}>
-          {painters.length > 0 ? painters.map((p) => (
-            <motion.div key={p._id} whileHover={{ scale: 1.05 }} style={{ backgroundColor: colors.cardBg, borderRadius: "1rem", padding: "1.5rem", textAlign: "center", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
-              <img
-  src={p.profileImage || "/default-avatar.png"} // ✅ Cloudinary URL or fallback
-  alt={p.name}
-  style={{
-    width: "6rem",
-    height: "6rem",
-    borderRadius: "50%",
-    margin: "0 auto 1rem",
-    objectFit: "cover",
-  }}
-/>
-
-
-              <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>{p.name}</h3>
-              <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>{p.city}</p>
-              <p style={{ fontSize: "0.75rem", marginTop: "0.5rem", color: colors.textMuted, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{p.bio}</p>
-              <button onClick={() => navigate(`/painters/${p._id}`)} style={{ marginTop: "1rem", backgroundColor: colors.secondary, color: "#fff", padding: "0.5rem 1rem", borderRadius: "0.5rem", cursor: "pointer" }}>View Profile</button>
-            </motion.div>
-          )) : <p style={{ textAlign: "center", color: colors.textMuted }}>No featured painters found.</p>}
+        <h2
+          style={{
+            textAlign: "center",
+            fontSize: "1.75rem",
+            fontWeight: "bold",
+            marginBottom: "2.5rem",
+          }}
+        >
+          Featured Painters
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "2rem",
+          }}
+        >
+          {painters.length > 0 ? (
+            painters.map((p) => (
+              <motion.div
+                key={p._id}
+                whileHover={{ scale: 1.05 }}
+                style={{
+                  backgroundColor: colors.cardBg,
+                  borderRadius: "1rem",
+                  padding: "1.5rem",
+                  textAlign: "center",
+                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                }}
+              >
+                <img
+                  src={p.profileImage || "/default-avatar.png"}
+                  alt={p.name}
+                  style={{
+                    width: "6rem",
+                    height: "6rem",
+                    borderRadius: "50%",
+                    margin: "0 auto 1rem",
+                    objectFit: "cover",
+                  }}
+                />
+                <h3 style={{ fontSize: "1.125rem", fontWeight: 600 }}>
+                  {p.name}
+                </h3>
+                <p style={{ fontSize: "0.875rem", color: colors.textMuted }}>
+                  {p.city}
+                </p>
+                <p
+                  style={{
+                    fontSize: "0.75rem",
+                    marginTop: "0.5rem",
+                    color: colors.textMuted,
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  }}
+                >
+                  {p.bio}
+                </p>
+                <button
+                  onClick={() => navigate(`/painters/${p._id}`)}
+                  style={{
+                    marginTop: "1rem",
+                    backgroundColor: colors.secondary,
+                    color: "#fff",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  View Profile
+                </button>
+              </motion.div>
+            ))
+          ) : (
+            <p style={{ textAlign: "center", color: colors.textMuted }}>
+              No featured painters found.
+            </p>
+          )}
         </div>
       </section>
 
-      {/* How It Works */}
-      <section ref={howRef} style={{ padding: "4rem 2rem", backgroundColor: colors.background, textAlign: "center" }}>
-        <h2 style={{ fontSize: "1.75rem", fontWeight: "bold", marginBottom: "2.5rem" }}>How It Works</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "2rem" }}>
-          <div><Search style={{ width: 48, height: 48, color: colors.primary, margin: "0 auto 1rem" }} /><h4 style={{ fontWeight: 600 }}>Browse Painters</h4></div>
-          <div><Calendar style={{ width: 48, height: 48, color: colors.primary, margin: "0 auto 1rem" }} /><h4 style={{ fontWeight: 600 }}>Book Instantly</h4></div>
-          <div><Paintbrush style={{ width: 48, height: 48, color: colors.primary, margin: "0 auto 1rem" }} /><h4 style={{ fontWeight: 600 }}>Get Painted</h4></div>
-          <div><Home style={{ width: 48, height: 48, color: colors.primary, margin: "0 auto 1rem" }} /><h4 style={{ fontWeight: 600 }}>Enjoy Your Home</h4></div>
+      {/* ✅ How It Works */}
+      <section
+        ref={howRef}
+        style={{
+          padding: "4rem 2rem",
+          backgroundColor: colors.background,
+          textAlign: "center",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "1.75rem",
+            fontWeight: "bold",
+            marginBottom: "2.5rem",
+          }}
+        >
+          How It Works
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: "2rem",
+          }}
+        >
+          <div>
+            <Search
+              style={{
+                width: 48,
+                height: 48,
+                color: colors.primary,
+                margin: "0 auto 1rem",
+              }}
+            />
+            <h4 style={{ fontWeight: 600 }}>Browse Painters</h4>
+          </div>
+          <div>
+            <Calendar
+              style={{
+                width: 48,
+                height: 48,
+                color: colors.primary,
+                margin: "0 auto 1rem",
+              }}
+            />
+            <h4 style={{ fontWeight: 600 }}>Book Instantly</h4>
+          </div>
+          <div>
+            <Paintbrush
+              style={{
+                width: 48,
+                height: 48,
+                color: colors.primary,
+                margin: "0 auto 1rem",
+              }}
+            />
+            <h4 style={{ fontWeight: 600 }}>Get Painted</h4>
+          </div>
+          <div>
+            <Home
+              style={{
+                width: 48,
+                height: 48,
+                color: colors.primary,
+                margin: "0 auto 1rem",
+              }}
+            />
+            <h4 style={{ fontWeight: 600 }}>Enjoy Your Home</h4>
+          </div>
         </div>
       </section>
 
